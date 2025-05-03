@@ -61,7 +61,7 @@ The most basic handles a noun doing something, and is handled by the pattern:
  )
 \end{lstlisting}
 
-The second type of sentence is a question sentence, which enforce questions to start with phrases like "when do", or "where does":
+The second type of sentence is a question sentence, which enforce questions to start with phrases like \textit{"when do"}, or \textit{"where does"}:
 
 \begin{lstlisting}
  S -> Wh-word Aux NP VP
@@ -90,30 +90,158 @@ The final sentence type are sentences beginning with a subordinate clause:
 \subsection{Verb Phrases}
 % TODO: verb phrases
 
+Verb phrases contain a verb and then optionally arguments. The arguments for this grammar can be: noun phrases, allowing verbs to have both a subject and object; noun phrases with a prepositional phrase, allowing prepositions to be added to modify the way the verb affects the object; adjective phrases allowing phrases to cause change to the noun phrase, conjunctions, allowing multiple verbs to affect the subject; a noun phrase and adverb, changing the direction of the verb on the object; or a subordinate clause, adding additional context to the sentence.
+
+\begin{lstlisting}
+ VP -> V
+ VP -> V S
+ VP -> V NP
+ VP -> V PP
+ VP -> V JJ
+ VP -> V Conj VP
+ VP -> V NP ADV
+ VP -> VP SBar
+\end{lstlisting}
+
 \subsection{Noun Phrases}
 % TODO: noun phrases
 
+Noun phrases are designed to contain the subject or object of a sentence. They contain: the number of elements with numerals before the nominal; a determiner and the nominal; a conjunction of two nominals; or just a single nominal or numeral.
+
+\begin{lstlisting}
+ NP -> Numeral Nominal
+ NP -> Det Nominal
+ NP -> Nominal
+ NP -> Numeral
+ NP -> NP Conj NP
+\end{lstlisting}
+
 \subsection{Nominals}
-% TODO: nominals
+
+Nominals represent the actual nouns: either proper or common, or a pronoun. Additionally, they contain the adjectives related to the nominal, and allow prepositional phrases to modify the nominal.
+
+\begin{lstlisting}
+ Nominal -> ProperNoun | CommonNoun
+ Nominal -> JJs ProperNoun | JJs CommonNoun
+ Nominal -> Pron
+ Nominal -> Nominal PP
+\end{lstlisting}
 
 \subsection{Prepositional Phrases}
-% TODO: preps
 
-\subsection{Conjunctions}
-% TODO: conjunctions
+Prepositional phrases add additional information to verbs or nominals. They begin with a preposition, and then noun phrase.
 
-\subsection{Number Agreement}
-% TODO: agreement
+\begin{lstlisting}
+ PP -> Prep NP
+ ---
+ examples:
+ S(
+  NP(Ollie and Stan)
+  VP(
+    V(deliver)
+    NP(
+      Nominal(
+        Nominal(black pianos)
+        PP(
+          Prep(in)
+          NP(the morning)
+        )
+      )
+    )
+  )
+ )
+ S(
+  NP(the piano)
+  VP(
+    V(remains)
+    PP(
+      Prep(on) 
+      NP(the steps)
+    )
+  )
+ )
+\end{lstlisting}
+
+\subsection{Adjectives}
+
+Adjectives are encoded to allow for one or many to exist before nouns or after verbs. This is done through a recursive grammar feature:
+
+\begin{lstlisting}
+ JJs -> JJ JJs | JJ
+ JJ -> "big" | "heavy" | ...
+\end{lstlisting}
+
+\subsection{Agreement}
+
+Agreement is achieved through the addition of a \texttt{NUM} attribute to sentences and sub-sentences. Where a singular noun exists, the \texttt{NUM} attribute is \texttt{sg}, or \texttt{pl} for plural nouns (e.g. \textit{"tables"}, or \textit{"Ollie and Stan"}).
+
+\begin{lstlisting}
+ NP[NUM=pl] -> NP Conj NP
+ 
+ Pron[NUM=sg] -> 'his'
+ ProperNoun[NUM=sg] -> 'Stan' | 'Ollie'
+ CommonNoun[NUM=pl] -> 'pianos' | 'steps'
+ CommonNoun[NUM=sg] -> 'piano' | 'step' | 'hat' | 'policeman' | 'morning' | 'hook'
+\end{lstlisting}
+
+The first \texttt{NP} rule above demonstrates that sentences must have plural verbs when two noun phrases are joined with a conjunction. Not enforcing the type of noun for these phrases allows for sentences like \textit{"Stan and the policemen..."} to be accepted, as well as \textit{"Stan and Ollie"}.
+
+When singular nouns are used and no conjunction exists, verbs should be in their plural form. For example: \textit{"Stan nods"} is valid, but \textit{"Stan nod"} is invalid.
+
+However, some verbs have plural forms which are the same as their third person singular version: \textit{"Stan put his hat on"} and \textit{"Stan puts his hat on"} are both valid.
+
+This is encoded by separating definitions of different verb types with relevant \texttt{NUM} values:
+
+\begin{lstlisting}
+
+ V[NUM=pl] -> "put" 
+ V[NUM=sg] -> "puts" | "put"
+ 
+ V[NUM=sg] -> "lifts" | "nods" | "hangs"
+ V[NUM=pl] -> "lift" | "nod"
+ 
+ V[NUM=sg] -> "appears" | "remains" | "hangs" | "slides" | "claims" | "does" | "is"
+ V[NUM=sg] -> "appears" | "remains" | "hangs" | "claims" | "does" | "is"
+ V[NUM=sg] -> "is" | "remains" | "appears"
+ 
+ V[NUM=pl] -> 'deliver' | 'do'
+ 
+ V[NUM=pl] -> "are"
+\end{lstlisting}
+
+We ensure that the \texttt{NP} and \texttt{VP} are in agreement through the addition of agreement rules:
+
+\begin{lstlisting}
+ S[NUM=?n] -> NP[NUM=?n] VP[NUM=?n, SUBCAT=nil]
+\end{lstlisting}
+
+Additional agreement is required for noun phrases where numerals are added to nominals to prevent phrases like \textit{"one pianos"}, but accept \textit{"one piano"}.
+
+\begin{lstlisting}
+ NP[NUM=?n] -> Numeral[NUM=?n] Nominal[NUM=?n]
+ Numeral[NUM=sg] -> "one"
+\end{lstlisting}
+
+Questions are a specific case, where \textit{"where does Ollie put the piano"} is valid, but \textit{"where does Ollie puts the piano"} and \textit{"where do Ollie put the piano"} are invalid, because the auxiliary phrase must agree with the noun phrase, but the verb must be in its infinitive form.
+
+\begin{lstlisting}
+ S[NUM=?n] -> Wh-word Aux[NUM=?m] NP[NUM=?m] VP[NUM=?n, SUBCAT=nil]
+ Aux[NUM=sg] -> "does" 
+ Aux[NUM=pl] -> "do"
+\end{lstlisting}
 
 \subsection{Verb Sub-Categorization}
-% TODO: verb sub-cat
+
 
 \section{Critical Analysis}
-% TODO: critical analysis
+
+There are very many complex relationships and verb forms in English. Some have been encoded here, but more work could be done to subcategorize verbs into their person, tense, and overal form more clearly.
+
+One of the negative example: \textit{"Stan lifts"} is potentially a valid English setence if \textit{"lifts"} is viewed as the activity of lifting weights. However here, it is only considered as the act of lifting, and so requires an object to be lifted.
 
 \section{Conclusion}
 
-Overall, all of the positive examples were successfully accepted by the grammar, with all of the negative examples being rejected. Number agreement is mostly integrated, ensuring invalid sentences like "Ollie and Stan puts the piano down". In addition, verb sub-categorization ensures that phrases like "Stan put", with no object, are rejected.
+Overall, all of the positive examples were successfully accepted by the grammar, with all of the negative examples being rejected. Number agreement is mostly integrated, ensuring invalid sentences like \textit{"Ollie and Stan puts the piano down"}. In addition, verb sub-categorization ensures that phrases like \textit{"Stan put"}, with no object, are rejected.
 
 There are, however, many improvements and extensions that could be made to improve the correctness of the grammar to accept more valid English sentences and reject invalid ones.
 
