@@ -18,7 +18,10 @@
 
 \usepackage[colorlinks=true, linkcolor=blue]{hyperref}
 
-\usepackage{listing}
+\usepackage{listings}
+
+\lstset{basicstyle=\ttfamily\footnotesize,breaklines=true}
+
 \usepackage{float}
 
 \title{CS5012 - P2}
@@ -43,9 +46,75 @@
 
 \section{Grammar Design}
 
+\subsection{Sentence Types}
+
+There are three ways sentences can begin with this grammar. 
+The most basic handles a noun doing something, and is handled by the pattern:
+
+\begin{lstlisting}
+ S -> NP VP
+ ---
+ example:
+ S(
+  NP(Ollie)
+  VP(appears)
+ )
+\end{lstlisting}
+
+The second type of sentence is a question sentence, which enforce questions to start with phrases like "when do", or "where does":
+
+\begin{lstlisting}
+ S -> Wh-word Aux NP VP
+ ---
+ example:
+ S(
+    Wh-word(when)
+    Aux(do)
+    NP(Ollie and Stan)
+    VP(deliver pianos)
+ )
+\end{lstlisting}
+
+The final sentence type are sentences beginning with a subordinate clause:
+
+\begin{lstlisting}
+ S -> SBar S
+ --
+ example:
+ S(
+  SBar(When the piano slides down the stairs) 
+  S(Ollie appears sad)
+ )
+\end{lstlisting}
+
+\subsection{Verb Phrases}
+% TODO: verb phrases
+
+\subsection{Noun Phrases}
+% TODO: noun phrases
+
+\subsection{Nominals}
+% TODO: nominals
+
+\subsection{Prepositional Phrases}
+% TODO: preps
+
+\subsection{Conjunctions}
+% TODO: conjunctions
+
+\subsection{Number Agreement}
+% TODO: agreement
+
+\subsection{Verb Sub-Categorization}
+% TODO: verb sub-cat
+
 \section{Critical Analysis}
+% TODO: critical analysis
 
 \section{Conclusion}
 
+Overall, all of the positive examples were successfully accepted by the grammar, with all of the negative examples being rejected. Number agreement is mostly integrated, ensuring invalid sentences like "Ollie and Stan puts the piano down". In addition, verb sub-categorization ensures that phrases like "Stan put", with no object, are rejected.
+
+There are, however, many improvements and extensions that could be made to improve the correctness of the grammar to accept more valid English sentences and reject invalid ones.
 
 \end{document}
