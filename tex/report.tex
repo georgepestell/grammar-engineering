@@ -181,7 +181,8 @@ Agreement is achieved through the addition of a \texttt{NUM} attribute to senten
  Pron[NUM=sg] -> 'his'
  ProperNoun[NUM=sg] -> 'Stan' | 'Ollie'
  CommonNoun[NUM=pl] -> 'pianos' | 'steps'
- CommonNoun[NUM=sg] -> 'piano' | 'step' | 'hat' | 'policeman' | 'morning' | 'hook'
+ CommonNoun[NUM=sg] -> 
+  'piano' | 'step' | 'hat' | 'policeman' | 'morning' | 'hook'
 \end{lstlisting}
 
 The first \texttt{NP} rule above demonstrates that sentences must have plural verbs when two noun phrases are joined with a conjunction. Not enforcing the type of noun for these phrases allows for sentences like \textit{"Stan and the policemen..."} to be accepted, as well as \textit{"Stan and Ollie"}.
@@ -196,16 +197,15 @@ This is encoded by separating definitions of different verb types with relevant 
 
  V[NUM=pl] -> "put" 
  V[NUM=sg] -> "puts" | "put"
- 
- V[NUM=sg] -> "lifts" | "nods" | "hangs"
  V[NUM=pl] -> "lift" | "nod"
+ V[NUM=sg] -> "lifts" | "nods" | "hangs"
  
- V[NUM=sg] -> "appears" | "remains" | "hangs" | "slides" | "claims" | "does" | "is"
+ V[NUM=sg] -> 
+  "appears" | "remains" | "hangs" | "slides" | "claims" | "does" | "is"
  V[NUM=sg] -> "appears" | "remains" | "hangs" | "claims" | "does" | "is"
  V[NUM=sg] -> "is" | "remains" | "appears"
  
  V[NUM=pl] -> 'deliver' | 'do'
- 
  V[NUM=pl] -> "are"
 \end{lstlisting}
 
@@ -232,17 +232,61 @@ Questions are a specific case, where \textit{"where does Ollie put the piano"} i
 
 \subsection{Verb Sub-Categorization}
 
+Verb subcategorization ensures that certain verbs to be followed by noun phrases or prepositional phrases. For example: \textit{"Stan puts"} is invalid because "puts" requires an object and direction, so \textit{"Stan puts the piano down"} is valid.
+
+This is handled through verb categories:
+
+\begin{lstlisting}
+V[SUBCAT=nil] -> 
+  "appears" | "remains" | "hangs" | "slides" | "claims" | "does" | "is"
+V[SUBCAT=[HEAD=s, TAIL=nil]] -> 
+  "appears" | "remains" | "hangs" | "slides" | "claims" | "does" | "is"
+V[SUBCAT=[HEAD=pp, TAIL=nil]] -> 
+  "appears" | "remains" | "hangs" | "claims" | "does" | "is"
+V[SUBCAT=[HEAD=pp, TAIL=[HEAD=jj, TAIL=nil]]] -> 
+  "appears" | "remains" | "hangs" | "claims" | "does" | "is"
+V[SUBCAT=[HEAD=jj, TAIL=nil]] -> "is" | "remains" | "appears"
+
+V[SUBCAT=[HEAD=pp, TAIL=nil]] -> "put" 
+V[SUBCAT=[HEAD=np, TAIL=[HEAD=adv, TAIL=nil]]] -> "put" 
+V[SUBCAT=[HEAD=np, TAIL=[HEAD=adv, TAIL=nil]]] -> "puts" | "put"
+
+V[SUBCAT=nil] -> "lifts" | "nods"
+V[SUBCAT=[HEAD=np, TAIL=nil]] -> "lifts" | "nods" | "hangs"
+V[SUBCAT=[HEAD=np, TAIL=nil]] -> "lift" | "nod"
+
+V[SUBCAT=nil] -> 'deliver' | 'do'
+V[SUBCAT=[HEAD=np, TAIL=nil]] -> 'deliver' | 'do'
+
+V[SUBCAT=[HEAD=np, TAIL=nil]] -> "are"
+V[SUBCAT=[HEAD=jj, TAIL=nil]] -> "are"
+\end{lstlisting}
+
+Some verbs are able to not be followed by anything, such as \textit{appears,remains,hangs, etc.}. Some can be followed by adjectives such as \textit{"Ollie appears sad"}, some can be followed by a subordinate clause such as \textit{"Stan claims pianos are heavy"}, where \textit{"pianos are heavy"} is the subordinate clause.
+
+When a verb phrase is parsed, the category of verb is encoded in, this ensures that only valid matching verb sub categories match the sentence construction:
+
+\begin{lstlisting}
+ VP[SUBCAT=?args] -> V[SUBCAT=?args]
+ VP[SUBCAT=?rest] -> V[SUBCAT=[HEAD=s, TAIL=?rest]] S
+ VP[SUBCAT=?rest] -> V[SUBCAT=[HEAD=np, TAIL=?rest]] NP
+ VP[SUBCAT=?rest] -> V[SUBCAT=?rest] PP
+ VP[SUBCAT=?rest] -> V[SUBCAT=[HEAD=jj, TAIL=?rest]] JJ
+ VP[SUBCAT=?rest] -> V[SUBCAT=?rest] Conj VP[SUBCAT=?rest]
+ VP[SUBCAT=?rest] -> 
+   V[SUBCAT=[HEAD=np, TAIL=[HEAD=adv, TAIL=?rest]]] NP ADV
+\end{lstlisting}
 
 \section{Critical Analysis}
 
-There are very many complex relationships and verb forms in English. Some have been encoded here, but more work could be done to subcategorize verbs into their person, tense, and overal form more clearly.
+All positive examples were accepted and negative examples rejected by this grammar. The grammar successfully categorizes noun phrases, prepositional phrases, and verb phrases. Additionally, agreement for the most part ensures that plural and singular nouns are followed by the correct verb form.
 
-One of the negative example: \textit{"Stan lifts"} is potentially a valid English setence if \textit{"lifts"} is viewed as the activity of lifting weights. However here, it is only considered as the act of lifting, and so requires an object to be lifted.
+There are very many complex relationships and verb forms in English. Some have been encoded here, but more work could be done to sub-categorize verbs into their person, tense, and overall form more clearly.
+
+One of the negative example: \textit{"Stan lifts"} is potentially a valid English sentence if \textit{"lifts"} is viewed as the activity of lifting weights. However here, it is only considered as the act of lifting, and so requires an object to be lifted.
 
 \section{Conclusion}
 
-Overall, all of the positive examples were successfully accepted by the grammar, with all of the negative examples being rejected. Number agreement is mostly integrated, ensuring invalid sentences like \textit{"Ollie and Stan puts the piano down"}. In addition, verb sub-categorization ensures that phrases like \textit{"Stan put"}, with no object, are rejected.
-
-There are, however, many improvements and extensions that could be made to improve the correctness of the grammar to accept more valid English sentences and reject invalid ones.
+In conclusion, this grammar successfully encodes a good number of English language rules and sentence constructions. Further work could encode more valid sentence features, and reject more invalid ones. However, one fundamental flaw with this approach to sentence validation is that semantically invalid sentences are not rejected.
 
 \end{document}

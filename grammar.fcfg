@@ -2,16 +2,16 @@ S[NUM=?n] -> NP[NUM=?n] VP[NUM=?n, SUBCAT=nil]
 S[NUM=?n] -> SBar[NUM=?n, SUBCAT=nil] S[NUM=?n, SUBCAT=nil]
 S[NUM=?n] -> Wh-word Aux[NUM=?m] NP[NUM=?m] VP[NUM=?n, SUBCAT=nil]
 
+VP[NUM=?n, SUBCAT=?args] -> V[NUM=?n, SUBCAT=?args]
 VP[NUM=?n, SUBCAT=?rest] -> V[NUM=?n, SUBCAT=[HEAD=s, TAIL=?rest]] S[NUM=?m]
-VP -> VP SBar
 VP[NUM=?n, SUBCAT=?rest] -> V[NUM=?n, SUBCAT=[HEAD=np, TAIL=?rest]] NP
 VP[NUM=?n, SUBCAT=?rest] -> V[NUM=?n, SUBCAT=?rest] PP
 VP[NUM=?n, SUBCAT=?rest] -> V[NUM=?n, SUBCAT=[HEAD=jj, TAIL=?rest]] JJ
-VP[NUM=?n, SUBCAT=?args] -> V[NUM=?n, SUBCAT=?args]
 VP[NUM=?n, SUBCAT=?rest] -> V[NUM=?n, SUBCAT=?rest] Conj VP[SUBCAT=?rest]
 VP[NUM=?n, SUBCAT=?rest] -> V[NUM=?n, SUBCAT=[HEAD=np, TAIL=[HEAD=adv, TAIL=?rest]]] NP ADV
+VP -> VP SBar
 
-NP[NUM=?n] -> Numeral Nominal[NUM=?n]
+NP[NUM=?n] -> Numeral[NUM=?n] Nominal[NUM=?n]
 NP[NUM=?n] -> Det Nominal[NUM=?n]
 NP[NUM=?n] -> Nominal[NUM=?n]
 NP[NUM=?n] -> Numeral[NUM=?n]
@@ -32,8 +32,6 @@ ADV -> 'down' | 'in' | 'on' | 'before'
 
 V[NUM=pl, SUBCAT=[HEAD=pp, TAIL=nil]] -> "put" 
 V[NUM=pl, SUBCAT=[HEAD=np, TAIL=[HEAD=adv, TAIL=nil]]] -> "put" 
-
-# V[NUM=sg, SUBCAT=?arg] -> "put" | "puts"
 V[NUM=sg, SUBCAT=[HEAD=np, TAIL=[HEAD=adv, TAIL=nil]]] -> "puts" | "put"
 
 V[NUM=sg, SUBCAT=[HEAD=np, TAIL=nil]] -> "lifts" | "nods" | "hangs"
