@@ -1,0 +1,72 @@
+S[NUM=?n] -> NP[NUM=?n] VP[NUM=?n, SUBCAT=nil]
+S[NUM=?n] -> SBar[NUM=?n, SUBCAT=nil] S[NUM=?n, SUBCAT=nil]
+S[NUM=?n] -> Wh-word Aux[NUM=?m] NP[NUM=?m] VP[NUM=?n, SUBCAT=nil]
+
+VP[NUM=?n, SUBCAT=?rest] -> V[NUM=?n, SUBCAT=[HEAD=s, TAIL=?rest]] S[NUM=?m]
+VP -> VP SBar
+VP[NUM=?n, SUBCAT=?rest] -> V[NUM=?n, SUBCAT=[HEAD=np, TAIL=?rest]] NP
+VP[NUM=?n, SUBCAT=?rest] -> V[NUM=?n, SUBCAT=?rest] PP
+VP[NUM=?n, SUBCAT=?rest] -> V[NUM=?n, SUBCAT=[HEAD=jj, TAIL=?rest]] JJ
+VP[NUM=?n, SUBCAT=?args] -> V[NUM=?n, SUBCAT=?args]
+VP[NUM=?n, SUBCAT=?rest] -> V[NUM=?n, SUBCAT=?rest] Conj VP[SUBCAT=?rest]
+VP[NUM=?n, SUBCAT=?rest] -> V[NUM=?n, SUBCAT=[HEAD=np, TAIL=[HEAD=adv, TAIL=?rest]]] NP ADV
+
+NP[NUM=?n] -> Numeral Nominal[NUM=?n]
+NP[NUM=?n] -> Det Nominal[NUM=?n]
+NP[NUM=?n] -> Nominal[NUM=?n]
+NP[NUM=?n] -> Numeral[NUM=?n]
+NP[NUM=pl] -> NP Conj NP
+
+Nominal[NUM=?n] -> ProperNoun[NUM=?n] | CommonNoun[NUM=?n]
+Nominal[NUM=?n] -> JJs ProperNoun | JJs CommonNoun[NUM=?n]
+Nominal[NUM=?n] -> Pron[NUM=?n]
+Nominal[NUM=?n] -> Nominal[NUM=?n] PP
+
+SBar[NUM=?n, SUBCAT=?args] -> Conj S[NUM=?n, SUBCAT=?args]
+
+PP -> Prep NP
+
+Prep -> 'on' | 'towards' | 'before' | 'in' | 'down'
+
+ADV -> 'down' | 'in' | 'on' | 'before'
+
+V[NUM=pl, SUBCAT=[HEAD=pp, TAIL=nil]] -> "put" 
+V[NUM=pl, SUBCAT=[HEAD=np, TAIL=[HEAD=adv, TAIL=nil]]] -> "put" 
+
+# V[NUM=sg, SUBCAT=?arg] -> "put" | "puts"
+V[NUM=sg, SUBCAT=[HEAD=np, TAIL=[HEAD=adv, TAIL=nil]]] -> "puts" | "put"
+
+V[NUM=sg, SUBCAT=[HEAD=np, TAIL=nil]] -> "lifts" | "nods" | "hangs"
+V[NUM=sg, SUBCAT=nil] -> "lifts" | "nods"
+V[NUM=pl, SUBCAT=[HEAD=np, TAIL=nil]] -> "lift" | "nod"
+
+V[NUM=sg, SUBCAT=nil] -> "appears" | "remains" | "hangs" | "slides" | "claims" | "does" | "is"
+V[NUM=sg, SUBCAT=[HEAD=s, TAIL=nil]] -> "appears" | "remains" | "hangs" | "slides" | "claims" | "does" | "is"
+V[NUM=sg, SUBCAT=[HEAD=pp, TAIL=nil]] -> "appears" | "remains" | "hangs" | "claims" | "does" | "is"
+V[NUM=sg, SUBCAT=[HEAD=pp, TAIL=[HEAD=jj, TAIL=nil]]] -> "appears" | "remains" | "hangs" | "claims" | "does" | "is"
+V[NUM=sg, SUBCAT=[HEAD=jj, TAIL=nil]] -> "is" | "remains" | "appears"
+
+V[NUM=pl, SUBCAT=nil] -> 'deliver' | 'do'
+V[NUM=pl, SUBCAT=[HEAD=np, TAIL=nil]] -> 'deliver' | 'do'
+
+V[NUM=pl, SUBCAT=[HEAD=np, TAIL=nil]] -> "are"
+V[NUM=pl, SUBCAT=[HEAD=jj, TAIL=nil]] -> "are"
+
+Wh-word -> "when"
+Aux[NUM=sg] -> "does" 
+Aux[NUM=pl] -> "do"
+
+Det -> 'the' | 'a' | 'his'
+Conj -> 'and' | 'when'
+
+
+JJs -> JJ JJs | JJ
+
+JJ -> 'big' | 'heavy' | 'white' | 'black' | 'happy' | 'sad'
+
+Pron[NUM=sg] -> 'his'
+ProperNoun[NUM=sg] -> 'Stan' | 'Ollie'
+CommonNoun[NUM=pl] -> 'pianos' | 'steps'
+CommonNoun[NUM=sg] -> 'piano' | 'step' | 'hat' | 'policeman' | 'morning' | 'hook'
+
+Numeral[NUM=sg] -> 'one'

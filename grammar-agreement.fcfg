@@ -1,0 +1,72 @@
+S[NUM=?n] -> NP[NUM=?n] VP[NUM=?n]
+S[NUM=?n] -> SBar[NUM=?n] S[NUM=?n]
+S[NUM=?n] -> Wh-word Aux[NUM=?m] NP[NUM=?m] VP[NUM=?n]
+
+VP[NUM=?n] -> V[NUM=?n] S[NUM=?m]
+VP -> VP SBar
+VP[NUM=?n] -> V[NUM=?n] NP
+VP[NUM=?n] -> V[NUM=?n] PP
+VP[NUM=?n] -> V[NUM=?n] JJ
+VP[NUM=?n] -> V[NUM=?n]
+VP[NUM=?n] -> V[NUM=?n] Conj VP
+VP[NUM=?n] -> V[NUM=?n] NP ADV
+
+NP[NUM=?n] -> Numeral Nominal[NUM=?n]
+NP[NUM=?n] -> Det Nominal[NUM=?n]
+NP[NUM=?n] -> Nominal[NUM=?n]
+NP[NUM=?n] -> Numeral[NUM=?n]
+NP[NUM=pl] -> NP Conj NP
+
+Nominal[NUM=?n] -> ProperNoun[NUM=?n] | CommonNoun[NUM=?n]
+Nominal[NUM=?n] -> JJs ProperNoun | JJs CommonNoun[NUM=?n]
+Nominal[NUM=?n] -> Pron[NUM=?n]
+Nominal[NUM=?n] -> Nominal[NUM=?n] PP
+
+SBar -> Conj S
+
+PP -> Prep NP
+
+Prep -> 'on' | 'towards' | 'before' | 'in' | 'down'
+
+ADV -> 'down' | 'in' | 'on' | 'before'
+
+V[NUM=pl] -> "put" 
+V[NUM=pl] -> "put" 
+
+# V[NUM=sg] -> "put" | "puts"
+V[NUM=sg] -> "put" | "puts"
+
+V[NUM=sg] -> "lifts" | "nods" | "hangs"
+V[NUM=sg] -> "lifts" | "nods"
+V[NUM=pl] -> "lift" | "nod"
+
+V[NUM=sg] -> "appears" | "remains" | "hangs" | "slides" | "claims" | "does" | "is"
+V[NUM=sg] -> "appears" | "remains" | "hangs" | "slides" | "claims" | "does" | "is"
+V[NUM=sg] -> "appears" | "remains" | "hangs" | "claims" | "does" | "is"
+V[NUM=sg] -> "is" | "remains"
+
+V[NUM=pl] -> 'deliver' | 'do'
+V[NUM=pl] -> 'deliver' | 'do'
+
+V[NUM=pl] -> "are"
+V[NUM=pl] -> "are"
+
+Wh-word -> "when"
+Aux[NUM=sg] -> "does" 
+Aux[NUM=pl] -> "do"
+
+Det -> 'the' | 'a' | 'his'
+Conj -> 'and' | 'when'
+
+
+JJs -> JJ JJs | JJ
+
+JJ -> 'big' | 'heavy' | 'white' | 'black' | 'happy' | 'sad'
+
+Pron[NUM=sg] -> 'his'
+ProperNoun[NUM=sg] -> 'Stan' | 'Ollie'
+CommonNoun[NUM=pl] -> 'pianos' | 'steps'
+CommonNoun[NUM=sg] -> 'piano' | 'step' | 'hat' | 'policeman' | 'morning' | 'hook'
+
+Numeral[NUM=sg] -> 'one'
+

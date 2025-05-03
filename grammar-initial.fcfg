@@ -1,0 +1,55 @@
+S -> NP VP
+S -> SBar S
+S -> Wh-word Aux NP VP
+
+Wh-word -> "when"
+Aux -> "does" 
+Aux -> "do"
+
+Q -> Conj VP
+
+VP -> V S
+VP -> VP SBar
+VP -> V NP
+VP -> V PP
+VP -> V JJ
+VP -> V
+VP -> V Conj VP
+VP -> V NP ADV
+
+NP -> Numeral Nominal
+NP -> Det Nominal
+NP -> Nominal
+NP -> Numeral
+NP -> NP Conj NP 
+
+Nominal -> ProperNoun | CommonNoun
+Nominal -> JJs ProperNoun | JJs CommonNoun
+Nominal -> Pron
+Nominal -> Nominal PP
+
+SBar -> Conj S
+
+PP -> Prep NP
+
+Pron -> 'his'
+Prep -> 'on' | 'towards' | 'before' | 'in' | 'down'
+
+ADV -> 'down' | 'in' | 'on' | 'before'
+V -> 'lifts' | 'nods' | 'appears' | 'remains' | 'hangs' | 'slides' | 'claims' | 'does'
+V -> 'puts'
+V -> 'lift' | 'put' | 'deliver' | 'nod' | 'is' | 'are' | 'do'
+
+Det -> 'the' | 'a' | 'his'
+Conj -> 'and' | 'when'
+
+JJs -> JJ JJs | JJ
+
+JJ -> 'big' | 'heavy' | 'white' | 'black' | 'happy' | 'sad'
+
+ProperNoun -> 'Stan' | 'Ollie'
+
+CommonNoun -> 'pianos' | 'steps'
+CommonNoun -> 'piano' | 'step' | 'hat' | 'policeman' | 'morning' | 'hook'
+
+Numeral -> 'one'
